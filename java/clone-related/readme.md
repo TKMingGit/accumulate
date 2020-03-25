@@ -1,0 +1,5 @@
+在Object基类中，有一个方法叫clone，产生一个前期对象的克隆，克隆对象是原对象的拷贝，由于引用类型的存在，有深克隆和浅克隆之分，若克隆对象中存在引用类型的属性，深克隆会将此属性完全拷贝一份，而浅克隆仅仅是拷贝一份此属性的引用。首先看一下容易犯的几个小问题:  
+ * clone方法是Object类的，并不是Cloneable接口的，Cloneable只是一个标记接口，标记接口是用用户标记实现该接口的类具有某种该接口标记的功能，常见的标记接口有三个：Serializable、Cloneable、RandomAccess，没有实现Cloneable接口，那么调用clone方法就会爆出CloneNotSupportedException异常。 
+ * Object类中的clone方法是protected修饰的，这就表明我们在子类中不重写此方法，就在子类外无法访问，因为这个protected权限是仅仅能在Object所在的包和子类能访问的，这也验证了子类重写父类方法权限修饰符可以变大但不能变小的说法
+ * 重写clone方法，内部仅仅是调用了父类的clone方法，其实是为了扩大访问权限，当然你可以把protected改为public，以后再继承就不用重写了。当然只是浅克隆的clone函数，深克隆就需要修改了。
+ * 属性是String的情况，String也是一个类，那String引用类型吗？String的表现有的像基本类型，归根到底就是因为String不可改变，克隆之后俩个引用指向同一个String，但当修改其中的一个，改的不是String的值，却是新生成一个字符串，让被修改的引用指向新的字符串。外表看起来就像基本类型一样。
