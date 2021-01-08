@@ -1,15 +1,15 @@
-package com.tkming.thread;
+package com.tkming.thread.createthread;
 
 /**
  * @author zhaoming-026
  * @version 1.0
  * @date 2020/3/31
- * @description 线程创建-继承Thread
+ * @description 线程创建-实现Runnable接口
  */
-public class CreateAboutExt extends Thread{
+public class CreateAboutImpl implements Runnable{
     private String name;
 
-    public CreateAboutExt(String name) {
+    public CreateAboutImpl(String name) {
         this.name = name;
     }
 
@@ -19,8 +19,9 @@ public class CreateAboutExt extends Thread{
     }
 
     public static void main(String[] args) {
-        CreateAboutExt createAbout =  new CreateAboutExt("sub");
-        createAbout.start();
+        CreateAboutImpl createAbout =  new CreateAboutImpl("sub");
+        Thread thread = new Thread(createAbout);
+        thread.start();
         System.out.println(Thread.currentThread().getName() + ", main like programing!");
     }
 }
