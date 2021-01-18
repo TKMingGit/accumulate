@@ -1,4 +1,4 @@
-package com.tkming.thread.processandthred;
+package com.tkming.thread.processandthread;
 
 /**
  * @version 1.0

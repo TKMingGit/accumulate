@@ -1,4 +1,4 @@
-package com.tkming.thread.variableshare;
+package com.tkming.thread.variableshare.saletickets;
 
 /**
  * @version 1.0

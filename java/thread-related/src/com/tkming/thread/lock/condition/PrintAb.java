@@ -1,4 +1,4 @@
-package com.tkming.thread.printAB.condition;
+package com.tkming.thread.lock.condition;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;

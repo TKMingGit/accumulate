@@ -1,4 +1,4 @@
-package com.tkming.thread.pool;
+package com.tkming.thread.pool.executor;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -7,12 +7,12 @@ import java.util.concurrent.Executors;
  * @author zhaoming-026
  * @version 1.0
  * @date 2020/3/31
- * @description 任务线程池，核心线程数1，最大线程数Integer.MAX_VALUE，不处理任务的非核心线程存活时间为0，
- * DelayedWorkQueue，非核心线程启动过多容易导致oom
+ * @description 单线程池，核心线程数1，最大线程数1，不处理任务的非核心线程存活时间为0，
+ * 无界队列LinkedBlockingQueue的初始大小为Integer.MAX_VALUE，队列元素过多容易导致oom
  */
-public class PoolSchedule {
+public class PoolSingle {
     public static void main(String[] args) {
-        ExecutorService single = Executors.newScheduledThreadPool(1);
+        ExecutorService single = Executors.newSingleThreadExecutor();
         single.execute(new Thread(() -> {
             try {
                 Thread.sleep(3000);

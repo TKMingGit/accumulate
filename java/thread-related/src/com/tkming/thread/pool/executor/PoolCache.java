@@ -1,4 +1,4 @@
-package com.tkming.thread.pool;
+package com.tkming.thread.pool.executor;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
