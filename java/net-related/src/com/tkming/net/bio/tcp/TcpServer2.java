@@ -1,4 +1,4 @@
-package com.tkming.net.tcp;
+package com.tkming.net.bio.tcp;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
