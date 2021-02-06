@@ -1,8 +1,12 @@
 package com.otg.tkming.jvmrelated.objreference;
 
 import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @version 1.0
@@ -12,44 +16,33 @@ import java.time.LocalDateTime;
  */
 public class Phantom {
     public static void main(String[] args) {
+        AtomicInteger i = new AtomicInteger();
+        List<byte[]> list = new ArrayList<>();
         ReferenceQueue<StringBuilder> referenceQueue = new ReferenceQueue();
-        MyThread myThread = new MyThread(referenceQueue);
-        myThread.setDaemon(true);
-        myThread.start();
-        StringBuilder s1 = new StringBuilder();
-        for (int i = 0; i < 50000; i++) {
-            s1.append("0000000000");
-        }
-        PhantomReference<StringBuilder> s2 = new PhantomReference<>(s1,referenceQueue);
-        s1 = null;
-        //可能没有gc,s2也会被置为null
-        System.out.println("even not gc:" + s2.get());
-        System.gc();
-        //再申请分配3m的内存,内存分配成功
-        byte[] b = new byte[1024*1024*3];
-    }
-}
-class MyThread extends Thread {
-    ReferenceQueue<StringBuilder> referenceQueue;
-    public MyThread(ReferenceQueue<StringBuilder> referenceQueue) {
-        this.referenceQueue = referenceQueue;
-    }
-
-    @Override
-    public void run() {
-        System.out.println(LocalDateTime.now() + " my thread start");
-        while (true) {
-            if (referenceQueue != null) {
+        PhantomReference<StringBuilder> pr = new PhantomReference<>(new StringBuilder(),referenceQueue);
+        //虚引用get()方法永远返回null,且虚引用对象会随时被gc回收
+        System.out.println("even not gc:" + pr.get());
+        new Thread(() -> {
+            while (true) {
+                i.getAndIncrement();
+                System.out.println("malloc heap time:" + i);
+                byte[] by1 = new byte[1024*1024];
+                list.add(by1);
                 try {
-                    PhantomReference<StringBuilder> phantomReference = (PhantomReference<StringBuilder>) referenceQueue.remove();
-                    if (phantomReference != null) {
-                        System.out.println(LocalDateTime.now() + " object is removed");
-                        break;
-                    }
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        }
+        }).start();
+
+        new Thread(() -> {
+            while (true) {
+                Reference reference = referenceQueue.poll();
+                if (reference != null) {
+                    System.out.println("---虚引用指向的对象被回收---" + reference);
+                }
+            }
+        }).start();
     }
 }
